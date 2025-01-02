@@ -10,7 +10,6 @@ class ProjectController extends Controller
 {
     public function index(Request $request){
         $query = Project::where('manager_id', auth()->id());
-
         if ($request->has('name') && $request->name) {
             $query->where('name', 'LIKE', '%' . $request->name . '%');
         }
@@ -44,21 +43,24 @@ class ProjectController extends Controller
         return view('projects.edit',compact('project'));
     }
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'project_code' => 'required|string|unique:projects,project_code',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'project_code' => 'required|string|unique:projects,project_code,' . $id, 
+    ]);
 
-        $project = Project::findOrFail($id);
+    $manager_id = Auth::id(); 
 
-        $project->update([
-            'name' =>$request->input('name'),
-            'project_code' => $request->input('project_code'),
-        ]);
+    $project = Project::findOrFail($id);
 
-        return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
-    }
+    $project->update([
+        'name' => $request->input('name'),
+        'project_code' => $request->input('project_code'),
+        'manager_id' => $manager_id 
+    ]);
+
+    return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
+}
 
     public function destroy($id)
     {

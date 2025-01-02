@@ -49,7 +49,6 @@
   </div>
 </form>
 
-
 <table class="table table-striped">
   <thead class="table-dark">
     <tr>
@@ -59,27 +58,29 @@
       <th scope="col">Description</th>
       <th scope="col">Assign To</th>
       <th scope="col">Status</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
     @foreach ($tasks as $task)
       <tr>
-        <th scope="row">{{ $task->id }}</th>
+        <th scope="row">{{ $loop->iteration }}</th>
         <td>{{ $task->name }}</td>
         <td>{{ $task->project->project_code }}</td>
         <td>{{ $task->description ?? '-' }}</td>
         <td>{{ $task->teammate ? $task->teammate->name : '-' }}</td>
         <td>{{ $task->status }}</td>
-        {{-- <td>
+        <td>
           <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-primary">Edit</a>
           <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
           </form>
-        </td> --}}
+        </td>
       </tr>
     @endforeach
   </tbody>
 </table>
+{{ $tasks->links('pagination::bootstrap-5') }}
 @endsection

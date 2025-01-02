@@ -15,6 +15,6 @@
         <label for="project_code" class="form-label">Project Code</label>
         <input id="project_code" name="project_code" type="text" class="form-control" value="{{ $project->project_code }}" required>
     </div>
-    <button type="submit" class="btn btn-primary">Create Project</button>
+    <button type="submit" class="btn btn-primary">Update Project</button>
 </form>
 @endsection

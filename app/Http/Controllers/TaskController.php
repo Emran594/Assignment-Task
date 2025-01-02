@@ -33,7 +33,7 @@ class TaskController extends Controller
             $query->where('teammate_id', auth()->id());
         }
     
-        $tasks = $query->get();
+        $tasks = $query->paginate(2);
         $projects = Project::all(); // For project dropdown filter
         $teammates = User::where('role', 'teammate')->get(); // For teammate dropdown filter
     
@@ -62,33 +62,32 @@ class TaskController extends Controller
     }
     
     public function edit($id){
-        // $project = Project::find($id);
-        // return view('projects.edit',compact('project'));
+        $task = Task::find($id);
+        $projects = Project::all();
+        $teammates = User::where('role', 'teammate')->get();
+        return view('tasks.edit',compact('task','projects','teammates'));
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, Task $task)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'project_code' => 'required|string|unique:projects,project_code',
+            'project_id' => 'required|exists:projects,id',
+            'teammate_id' => 'nullable|exists:users,id',
+            'description' => 'nullable|string',
+            'status' => 'required|in:Pending,Working,Done',
         ]);
+    
+        $task->update($request->all());
 
-        // $project = Project::findOrFail($id);
-
-        // $project->update([
-        //     'name' =>$request->input('name'),
-        //     'project_code' => $request->input('project_code'),
-        // ]);
-
-        return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
+        return redirect()->route('tasks.index')->with('success', 'Task updated successfully!');
     }
-
-    public function destroy($id)
+    
+    public function destroy(Task $task)
     {
-        // $project = Project::findOrFail($id);
-
-        // $project->delete();
-        // return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
+        $task->delete();
+        return redirect()->route('tasks.index')->with('success', 'Task deleted successfully!');
     }
+    
 
 
 }

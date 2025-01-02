@@ -31,6 +31,13 @@
                 <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
         </div>
+        <div class="block mt-4">
+            <div class="col-md-6">
+                <h4>For Manager Login</h4>
+                <p>email: emranhasans594@gmail.com</p>
+                <p>Pass: 12345678</p>
+            </div>
+        </div>
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
